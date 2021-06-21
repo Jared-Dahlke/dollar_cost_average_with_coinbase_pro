@@ -7,6 +7,8 @@ const secret = process.env.SECRET
 const key = process.env.KEY
 const passphrase = process.env.PASSPHRASE
 
+const dollarAmountToBuy = 5
+
 async function buyBitcoin() {
 	const apiURI = 'https://api.pro.coinbase.com'
 	const authedClient = new CoinbasePro.AuthenticatedClient(
@@ -20,7 +22,7 @@ async function buyBitcoin() {
 		side: 'buy',
 		type: 'market',
 		product_id: 'BTC-USD',
-		funds: 5
+		funds: dollarAmountToBuy
 	}
 
 	await authedClient.placeOrder(params, console.log('placed'))
