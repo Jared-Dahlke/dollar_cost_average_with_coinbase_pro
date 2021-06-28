@@ -7,30 +7,34 @@ const secret = process.env.SECRET
 const key = process.env.KEY
 const passphrase = process.env.PASSPHRASE
 const apiURI = 'https://api.pro.coinbase.com'
-const authedClient = new CoinbasePro.AuthenticatedClient(
-	key,
-	secret,
-	passphrase,
-	apiURI
-)
 
 const buy_frequency_hours = 3
 const dollarAmountToBuy = 5 // min is 5
 const deposit_amount = 100
 
 async function startProcess() {
+	const authedClient = new CoinbasePro.AuthenticatedClient(
+		key,
+		secret,
+		passphrase,
+		apiURI
+	)
+
 	const accounts = await authedClient.getAccounts()
 	let usdAccountId = accounts.filter((account) => account.currency === 'USD')[0]
 		.id
 	const account = await authedClient.getAccount(usdAccountId)
 	if (Number(account.available) < Number(dollarAmountToBuy)) {
-		let success = await makeDeposit(authedClient)
+		await makeDeposit(authedClient)
+		setTimeout(() => {
+			startProcess()
+		}, 30000)
+	} else {
+		buyBitcoin(authedClient)
+		setTimeout(() => {
+			startProcess()
+		}, buy_frequency_hours * 3600000)
 	}
-	buyBitcoin(authedClient)
-
-	setTimeout(() => {
-		startProcess()
-	}, buy_frequency_hours * 3600000)
 }
 
 async function buyBitcoin(authedClient) {
