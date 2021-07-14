@@ -8,9 +8,9 @@ const key = process.env.KEY
 const passphrase = process.env.PASSPHRASE
 const apiURI = 'https://api.pro.coinbase.com'
 
-const buy_frequency_hours = 3
+const buy_frequency_hours = 0.5
 const dollarAmountToBuy = 5 // min is 5
-const deposit_amount = 100
+const deposit_amount = 0
 
 async function startProcess() {
 	const authedClient = new CoinbasePro.AuthenticatedClient(
@@ -25,7 +25,7 @@ async function startProcess() {
 		.id
 	const account = await authedClient.getAccount(usdAccountId)
 	if (Number(account.available) < Number(dollarAmountToBuy)) {
-		await makeDeposit(authedClient)
+		makeDeposit(authedClient)
 		setTimeout(() => {
 			startProcess()
 		}, 30000)
@@ -61,16 +61,40 @@ async function makeDeposit(authedClient) {
 	let instantBuyPaymentMethodId = paymentMethods.filter(
 		(methods) => methods.instant_buy === true
 	)[0].id
-	let deposit = await authedClient.depositPayment({
+	authedClient.depositPayment({
 		amount: deposit_amount, // dollarAmountToBuy * 10,
 		currency: 'USD',
 		payment_method_id: instantBuyPaymentMethodId
 	})
 	console.log(`the bot deposited ${deposit.amount} USD at ${new Date()}`)
-	return true
+}
+
+async function calculatePurchases() {
+	const start_date = '2021-06-30'
+	const authedClient = new CoinbasePro.AuthenticatedClient(
+		key,
+		secret,
+		passphrase,
+		apiURI
+	)
+
+	let purchases = await authedClient.getFills({ product_id: 'BTC-USD' })
+
+	let bitcoinPurchased = 0
+	let dollarsSpent = 0
+	for (const purchase of purchases) {
+		if (purchase.created_at > start_date && purchase.side === 'buy') {
+			bitcoinPurchased = bitcoinPurchased + Number(purchase.size)
+			dollarsSpent = dollarsSpent + Number(purchase.usd_volume)
+		}
+	}
+
+	console.log(dollarsSpent)
+	console.log(bitcoinPurchased)
 }
 
 app.listen(port, function () {
 	console.log(`app listening on port ${7000}`)
-	startProcess()
+	//	startProcess()
+	calculatePurchases()
 })
