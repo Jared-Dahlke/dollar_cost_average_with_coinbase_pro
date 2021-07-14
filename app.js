@@ -12,7 +12,7 @@ const buy_frequency_hours = 0.5
 const dollarAmountToBuy = 5 // min is 5
 const deposit_amount = 0
 
-async function startProcess() {
+async function startDcaProcess() {
 	const authedClient = new CoinbasePro.AuthenticatedClient(
 		key,
 		secret,
@@ -27,12 +27,12 @@ async function startProcess() {
 	if (Number(account.available) < Number(dollarAmountToBuy)) {
 		makeDeposit(authedClient)
 		setTimeout(() => {
-			startProcess()
+			startDcaProcess()
 		}, 30000)
 	} else {
 		buyBitcoin(authedClient)
 		setTimeout(() => {
-			startProcess()
+			startDcaProcess()
 		}, buy_frequency_hours * 3600000)
 	}
 }
@@ -95,6 +95,6 @@ async function calculatePurchases() {
 
 app.listen(port, function () {
 	console.log(`app listening on port ${7000}`)
-	//	startProcess()
+	//	startDcaProcess()
 	calculatePurchases()
 })
