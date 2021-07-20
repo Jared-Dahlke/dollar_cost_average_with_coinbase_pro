@@ -8,9 +8,10 @@ const key = process.env.KEY
 const passphrase = process.env.PASSPHRASE
 const apiURI = 'https://api.pro.coinbase.com'
 
-const buy_frequency_hours = 0.5
+const buy_frequency_hours = 3
 const dollarAmountToBuy = 5 // min is 5
-const deposit_amount = 0
+const deposit_amount = 50
+const product_id = 'BTC-USD'
 
 async function startDcaProcess() {
 	const authedClient = new CoinbasePro.AuthenticatedClient(
@@ -26,6 +27,9 @@ async function startDcaProcess() {
 	const account = await authedClient.getAccount(usdAccountId)
 	if (Number(account.available) < Number(dollarAmountToBuy)) {
 		makeDeposit(authedClient)
+		//note: the depositPayment method in the coinbase api works, but
+		//it shows an error, there is no way of knowing when it is finished
+		//depositing, hence the settimeout here:
 		setTimeout(() => {
 			startDcaProcess()
 		}, 30000)
@@ -41,17 +45,17 @@ async function buyBitcoin(authedClient) {
 	const params = {
 		side: 'buy',
 		type: 'market',
-		product_id: 'BTC-USD',
+		product_id: product_id,
 		funds: dollarAmountToBuy
 	}
 
 	try {
 		let order = await authedClient.placeOrder(params)
 		console.log(
-			`the bot bought ${order.specified_funds} worth of bitcoin at ${order.created_at}`
+			`the bot bought ${order.specified_funds} worth of ${product_id} at ${order.created_at}`
 		)
 	} catch (err) {
-		console.log('error buying bitcoin:')
+		console.log('error:')
 		console.log(err)
 	}
 }
@@ -62,15 +66,14 @@ async function makeDeposit(authedClient) {
 		(methods) => methods.instant_buy === true
 	)[0].id
 	authedClient.depositPayment({
-		amount: deposit_amount, // dollarAmountToBuy * 10,
+		amount: deposit_amount,
 		currency: 'USD',
 		payment_method_id: instantBuyPaymentMethodId
 	})
 	console.log(`the bot deposited ${deposit.amount} USD at ${new Date()}`)
 }
 
-async function calculatePurchases() {
-	const start_date = '2021-06-30'
+async function calculatePurchasesSince(start_date) {
 	const authedClient = new CoinbasePro.AuthenticatedClient(
 		key,
 		secret,
@@ -78,7 +81,7 @@ async function calculatePurchases() {
 		apiURI
 	)
 
-	let purchases = await authedClient.getFills({ product_id: 'BTC-USD' })
+	let purchases = await authedClient.getFills({ product_id: product_id })
 
 	let bitcoinPurchased = 0
 	let dollarsSpent = 0
@@ -95,6 +98,6 @@ async function calculatePurchases() {
 
 app.listen(port, function () {
 	console.log(`app listening on port ${7000}`)
-	//	startDcaProcess()
-	calculatePurchases()
+	startDcaProcess()
+	//	calculatePurchasesSince('2021-06-30')
 })

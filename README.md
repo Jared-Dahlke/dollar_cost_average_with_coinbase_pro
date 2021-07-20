@@ -1,7 +1,7 @@
 # dca
 
 INTRO:
-This is a nodeJs server I built that is set to automatically purchase $5 worth of bitcoin every 3 hours, indefinitely. You can change the amount by changing the dollarAmountToBuy variable in app.js file. You can change the frequency by changing the buy_frequency_hours variable in app.js. Once your funds run low the app will use your first instant buy funding source to deposit more funds into your account so that it can cover the purchase, you can change that amount by changing the deposit_amount variable in app.js
+This is a nodeJs server I built that is set to automatically purchase $5 worth of bitcoin every N hours, indefinitely. You can change the amount by changing the dollarAmountToBuy variable in app.js file. You can change the frequency by changing the buy_frequency_hours variable in app.js. Once your funds run low the app will use your first instant buy funding source to deposit more funds into your account so that it can cover the purchase, you can change that amount by changing the deposit_amount variable in app.js
 Please note that minimum amount per buy is $5, and the minimum deposit amount is \$10
 
 SET UP INSTRUCTIONS:
@@ -27,3 +27,5 @@ SET UP INSTRUCTIONS:
 AND THAT'S IT , YOU ARE DONE.
 
 if you want to quit just close the server
+
+ps. I added a new function that lets you calcualte total dollars spent and total bitcoin purchased since a given date. By default this function is commented out, if you want to run it just comment out the startDCAProcess function and uncomment the calculatePurchasesSince function.
