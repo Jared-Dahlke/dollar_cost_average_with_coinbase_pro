@@ -33,6 +33,7 @@ Please note that minimum amount per buy is $5, and the minimum deposit amount is
 
 ### AND THAT'S IT , YOU ARE DONE.
 
-if you want to quit just close the server
+if you want to stop the DCA process, just close the server: (Ctrl + C).
+When you're ready to start it again, run `npm run start` again.
 
-ps. I added a new function that lets you calcualte total dollars spent and total bitcoin purchased since a given date. By default this function is commented out, if you want to run it just comment out the startDCAProcess function and uncomment the calculatePurchasesSince function.
+ps. I added a new function that lets you calcualte total dollars spent and total bitcoin purchased since a given date. I like to use it every few weeks so I can keep up with my cost basis. By default this function is commented out, if you want to run it just comment out the startDCAProcess function and uncomment the calculatePurchasesSince function.
