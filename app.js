@@ -9,7 +9,8 @@ const passphrase = process.env.PASSPHRASE
 const apiURI = 'https://api.pro.coinbase.com'
 
 const buy_frequency_hours = process.env.BUY_FREQUENCY_HOURS
-const dollar_amount_to_buy = process.env.DOLLAR_AMOUNT_TO_BUY
+const dollar_amount_to_buy_per_purchase =
+	process.env.DOLLAR_AMOUNT_TO_BUY_PER_PURCHASE
 
 const {
 	buyBitcoin,
@@ -31,7 +32,7 @@ async function startDcaProcess() {
 	let usdAccountId = accounts.filter((account) => account.currency === 'USD')[0]
 		.id
 	const account = await getAccount(usdAccountId)
-	if (Number(account.available) < Number(dollar_amount_to_buy)) {
+	if (Number(account.available) < Number(dollar_amount_to_buy_per_purchase)) {
 		makeDeposit(authedClient)
 		//note: the depositPayment method in the coinbase api works, but
 		//it shows an error, there is no way of knowing when it is finished

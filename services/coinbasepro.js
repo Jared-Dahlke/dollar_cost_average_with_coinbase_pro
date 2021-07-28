@@ -6,7 +6,8 @@ const passphrase = process.env.PASSPHRASE
 const apiURI = 'https://api.pro.coinbase.com'
 
 const buy_frequency_hours = process.env.BUY_FREQUENCY_HOURS
-const dollar_amount_to_buy = process.env.DOLLAR_AMOUNT_TO_BUY
+const dollar_amount_to_buy_per_purchase =
+	process.env.DOLLAR_AMOUNT_TO_BUY_PER_PURCHASE
 const deposit_amount = process.env.DEPOSIT_AMOUNT
 const product_id = process.env.PRODUCT_ID
 
@@ -30,7 +31,7 @@ async function buyBitcoin() {
 		side: 'buy',
 		type: 'market',
 		product_id: product_id,
-		funds: dollar_amount_to_buy
+		funds: dollar_amount_to_buy_per_purchase
 	}
 
 	try {
