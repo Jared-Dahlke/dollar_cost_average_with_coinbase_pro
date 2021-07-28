@@ -2,7 +2,7 @@
 
 ## INTRO:
 
-This is a NodeJS server I built that is set to automatically purchase $5 worth of bitcoin every N hours, indefinitely. You can change how much to buy, how often to buy, and how much to re fund your account when it runs low. Once your funds run low the app will use your first instant buy funding source to deposit more funds into your account so that it can cover the purchase.
+This is a NodeJS server I built that is set to automatically purchase $5 worth of bitcoin every N hours, indefinitely. It uses the [Coinbase Pro NodeJS API](https://www.npmjs.com/package/coinbase-pro). You can change how much to buy, how often to buy, and how much to re fund your account when it runs low. Once your funds run low the app will use your first instant buy funding source to deposit more funds into your account so that it can cover the purchase.
 Please note that minimum amount per buy is $5, and the minimum deposit amount is \$10
 
 ## SET UP INSTRUCTIONS:
