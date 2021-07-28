@@ -25,8 +25,11 @@ Please note that minimum amount per buy is $5, and the minimum deposit amount is
 ```
 
 4. open a terminal on your computer, navigate to the directory, and run the following commands:
+
+```
    npm i
    npm run start
+```
 
 ### AND THAT'S IT , YOU ARE DONE.
 
