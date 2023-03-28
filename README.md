@@ -1,5 +1,7 @@
 # dca
 
+# This package will no longer work due to CoinbasePro migrating to their new API. As of early 2023 use something like this: https://www.npmjs.com/package/coinbase-advanced-node
+
 ## INTRO:
 
 This is a NodeJS server I built that is set to automatically purchase $5 worth of bitcoin every N hours, indefinitely. It uses the [Coinbase Pro NodeJS API](https://www.npmjs.com/package/coinbase-pro). You can change how much to buy, how often to buy, and how much to re fund your account when it runs low. Once your funds run low the app will use your first instant buy funding source to deposit more funds into your account so that it can cover the purchase.
